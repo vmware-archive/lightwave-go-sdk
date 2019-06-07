@@ -4,21 +4,14 @@
 
 ## Overview
 
-## Try it out
+The lightwave-go-sdk Project provides a GOLANG module that can be consumed by client programs implemented using GOLANG to communicate with the Lightwave Server.
 
-### Prerequisites
+This SDK provides the following capabilities.
 
-* Prereq 1
-* Prereq 2
-* Prereq 3
+* Library methods to acquire and renew SAML-2.0 tokens from Lightwave
+* Library methods to acquire and renew OIDC tokens from Lightwave
 
-### Build & Run
-
-1. Step 1
-2. Step 2
-3. Step 3
-
-## Documentation
+For information on Lightwave, please refer to https://github.com/vmware/lightwave
 
 ## Contributing
 
