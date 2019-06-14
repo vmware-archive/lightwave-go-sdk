@@ -10,8 +10,8 @@ import (
 	"crypto/x509"
 	"strings"
 
-	"github.com/vmware/lightwave/vmafd/interop/go/src/vecsclient"
-	"github.com/vmware/lightwave/vmidentity/goclients/oidc"
+	"github.com/vmware/lightwave-go-sdk/vecsclient"
+	"github.com/vmware/lightwave-go-sdk/oidc"
 )
 
 var configPath = flag.String("config", "", "Path to file containing config in yaml format")
