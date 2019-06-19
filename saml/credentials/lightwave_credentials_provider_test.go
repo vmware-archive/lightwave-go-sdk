@@ -1,4 +1,4 @@
-package tests
+package credentials
 
 import (
 	"errors"
@@ -13,7 +13,6 @@ import (
 	awscreds "github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kinesis"
-	"github.com/vmware/lightwave/vmidentity/goclients/saml/credentials"
 	"io/ioutil"
 	"net/http"
 	"os/exec"
@@ -80,21 +79,21 @@ func getHTTPClient() *http.Client {
 }
 
 func TestLightwaveMetadataDoc(t *testing.T) {
-	data, err := credentials.GetSamlMetaData(*lwFqdn, *tenant, httpClient)
+	data, err := GetSamlMetaData(*lwFqdn, *tenant, httpClient)
 	assert.Nil(t, err)
 	// The result must be greater than 1024 byte
 	assert.True(t, len(data) > 1024)
 }
 
 func TestLightwaveSAMLTokenByPassword(t *testing.T) {
-	data, err := credentials.GetSamlTokenByPassword(*lwFqdn, *tenant, *username, *password, httpClient)
+	data, err := GetSamlTokenByPassword(*lwFqdn, *tenant, *username, *password, httpClient)
 	assert.Nil(t, err)
 	// The result must be greater than 1024 byte
 	assert.True(t, len(data) > 1024)
 }
 
 func TestLightwaveSAMLTokenInvalidCredentials(t *testing.T) {
-	data, err := credentials.GetSamlTokenByPassword(*lwFqdn, *tenant, *username, "123", httpClient)
+	data, err := GetSamlTokenByPassword(*lwFqdn, *tenant, *username, "123", httpClient)
 	assert.Empty(t, data)
 	if assert.NotNil(t, err) {
 		assert.Contains(t, err.Error(), "FailedAuthentication")
@@ -106,13 +105,13 @@ func TestLightwaveSAMLTokenByCert(t *testing.T) {
 		t.Skipf("Private Key or cert path not provided, skipping GetTokenByCert test")
 	}
 
-	cert, err := credentials.ParseCertificate(*certPath)
+	cert, err := ParseCertificate(*certPath)
 	assert.Nil(t, err)
 
-	privateKey, err := credentials.ParsePrivateKey(*privateKeyPath)
+	privateKey, err := ParsePrivateKey(*privateKeyPath)
 	assert.Nil(t, err)
 
-	data, err := credentials.GetSamlTokenByCert(*lwFqdn, *tenant, cert, privateKey, httpClient)
+	data, err := GetSamlTokenByCert(*lwFqdn, *tenant, cert, privateKey, httpClient)
 	assert.Nil(t, err)
 
 	// The result must be greater than 1024 byte
@@ -124,7 +123,7 @@ func TestAssumeRoleCLI(t *testing.T) {
 		t.Skipf("role/principal ARN not provided, skipping AWS credential tests")
 	}
 
-	provider := credentials.LightwaveProvider{
+	provider := LightwaveProvider{
 		LightwaveFQDN:  *lwFqdn,
 		Region:         *region,
 		Tenant:         *tenant,
@@ -167,7 +166,7 @@ func TestPublishToKinesisWithLightwaveSAML(t *testing.T) {
 		t.Skipf("role/principal ARN not provided, skipping AWS credential tests")
 	}
 
-	provider := credentials.LightwaveProvider{
+	provider := LightwaveProvider{
 		LightwaveFQDN:  *lwFqdn,
 		Region:         *region,
 		Tenant:         *tenant,
